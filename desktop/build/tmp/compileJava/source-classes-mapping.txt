@@ -1,0 +1,2 @@
+com/badlogic/greedydwarf/desktop/DesktopLauncher.java
+ com.badlogic.greedydwarf.desktop.DesktopLauncher
