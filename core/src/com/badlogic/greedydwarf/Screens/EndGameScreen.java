@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.greedydwarf.GreedyDwarf;
 
-public class MainMenuScreen implements Screen {
+public class EndGameScreen implements Screen {
 
     final GreedyDwarf game;
     TextButton startButton;
@@ -22,7 +22,7 @@ public class MainMenuScreen implements Screen {
     Skin skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
     Stage stage;
 
-    public MainMenuScreen(final GreedyDwarf game) {
+    public EndGameScreen(final GreedyDwarf game, int score, boolean died) {
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -32,34 +32,38 @@ public class MainMenuScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         BitmapFont font = new BitmapFont();
 
-        final TextButton playButton = new TextButton("Play", skin, "default");
-        playButton.setWidth(100);
+        // displays the play again button
+        final TextButton playButton = new TextButton("Play Again", skin, "default");
+        playButton.setWidth(200);
         playButton.setHeight(50);
-        playButton.setPosition(Gdx.graphics.getWidth()/4-playButton.getWidth()/2,Gdx.graphics.getHeight()/3-playButton.getHeight()/3);
+        playButton.setPosition(Gdx.graphics.getWidth()*2/5-15-playButton.getWidth()/2,Gdx.graphics.getHeight()/3-playButton.getHeight()/3);
         stage.addActor(playButton);
 
-        final TextButton loadButton = new TextButton("Load", skin, "default");
-        loadButton.setWidth(100);
-        loadButton.setHeight(50);
-        loadButton.setPosition(Gdx.graphics.getWidth()*2/5-loadButton.getWidth()/2,Gdx.graphics.getHeight()/3-loadButton.getHeight()/3);
-        stage.addActor(loadButton);
-
-        final TextButton createButton = new TextButton("Create", skin, "default");
-        createButton.setWidth(140);
-        createButton.setHeight(50);
-        createButton.setPosition(Gdx.graphics.getWidth()*4/7-createButton.getWidth()/2,Gdx.graphics.getHeight()/3-createButton.getHeight()/3);
-        stage.addActor(createButton);
-
+        // displays the quit button
         final TextButton quitButton = new TextButton("Quit", skin, "default");
         quitButton.setWidth(100);
         quitButton.setHeight(50);
-        quitButton.setPosition(Gdx.graphics.getWidth()*74/100-quitButton.getWidth()/2,Gdx.graphics.getHeight()/3-quitButton.getHeight()/3);
+        quitButton.setPosition(Gdx.graphics.getWidth()*3/5+25-quitButton.getWidth()/2,Gdx.graphics.getHeight()/3-quitButton.getHeight()/3);
         stage.addActor(quitButton);
 
-        Label title = new Label("Greedy Dwarf", skin,"title");
-        title.setPosition(Gdx.graphics.getWidth()/2-title.getWidth()/2,Gdx.graphics.getHeight()*3/5-title.getHeight()*3/5);
-        stage.addActor(title);
+        // displays text depending on whether they died or not on screen
+        if (died == true) {
+            Label endGame = new Label("You Died", skin,"title");
+            endGame.setPosition(Gdx.graphics.getWidth()/2-endGame.getWidth()/2,Gdx.graphics.getHeight()*4/5-endGame.getHeight());
+            stage.addActor(endGame);
+        } else {
+            Label endGame = new Label("You Lived!", skin,"title");
+            endGame.setPosition(Gdx.graphics.getWidth()/2-endGame.getWidth()/2,Gdx.graphics.getHeight()*4/5-endGame.getHeight());
+            stage.addActor(endGame);
+        }
 
+
+        // displays final score on screen
+        Label showScore = new Label("Score: " + score, skin,"default");
+        showScore.setPosition(Gdx.graphics.getWidth()/2-showScore.getWidth()/2,Gdx.graphics.getHeight()*53/100-showScore.getHeight());
+        stage.addActor(showScore);
+
+        // when play again button is pressed we start a new game
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
@@ -67,18 +71,8 @@ public class MainMenuScreen implements Screen {
 //                game.setScreen(new GameScreen(game));
             }
         });
-        loadButton.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                game.setScreen(new LoadScreen(game));
-            }
-        });
-        createButton.addListener(new ChangeListener() {
-            @Override
-            public void changed (ChangeEvent event, Actor actor) {
-                game.setScreen(new CreateScreen(game));
-            }
-        });
+
+        // when quit button is pressed we close the program
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {
