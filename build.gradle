@@ -62,6 +62,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        
+        compile "com.github.xaguzman:pathfinding:0.2.6"
+        compile "com.github.xaguzman:pathfinding-gdx-bridge:0.2.6"
     }
 }
